@@ -1,4 +1,5 @@
-﻿from fastapi import FastAPI
+# app/main.py
+from fastapi import FastAPI
 from app.database import engine, Base
 from app.models import User, Verb, UserProgress, ExamResult
 from app.api import auth, verbs, practice, admin
