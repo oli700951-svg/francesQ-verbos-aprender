@@ -1,3 +1,4 @@
+# app/api/practice.py
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app import models, schemas, database
@@ -16,7 +17,7 @@ def get_current_user_id(token: str = Depends(oauth2_scheme)):
         user_id = int(payload.get("sub"))
         return user_id
     except JWTError:
-        raise HTTPException(status_code=401, detail="Token inválido")
+        raise HTTPException(status_code=401, detail="Token invÃ¡lido")
 
 @router.post("/individual")
 def practice_individual(
@@ -36,8 +37,8 @@ def practice_individual(
         verb.presente_je, verb.presente_tu, verb.presente_il,
         verb.presente_nous, verb.presente_vous, verb.presente_ils
     ]
-    presente_score = sum(1 for u, c in zip(presente_answers, presente_correct) if u.strip().lower() == c.lower())
-    passe_score = 1 if request.passe.je.strip().lower() == verb.passe_compose.lower() else 0
+    presente_score = sum(1 for u, c in zip(presente_answers, presente_correct) if u.strip().lower() == (c or "").lower())
+    passe_score = 1 if request.passe.je.strip().lower() == (verb.passe_compose or "").lower() else 0
 
     total_correct = presente_score + passe_score
     total_questions = 7
@@ -68,14 +69,13 @@ def get_exam(db: Session = Depends(database.get_db)):
             i = random.randint(0, 5)
             questions.append({
                 "question": f"Conjuga '{verb.infinitive}' en presente con '{sujetos[i]}':",
-                "answer": [verb.presente_je, verb.presente_tu, verb.presente_il,
-                          verb.presente_nous, verb.presente_vous, verb.presente_ils][i],
+                "answer": [verb.presente_je, verb.presente_tu, verb.presente_il, verb.presente_nous, verb.presente_vous, verb.presente_ils][i],
                 "verb_id": verb.id,
                 "type": "presente"
             })
         else:
             questions.append({
-                "question": f"¿Cómo se dice 'je' + '{verb.spanish}' en passé composé?",
+                "question": f"Â¿CÃ³mo se dice 'je' + '{verb.spanish}' en passÃ© composÃ©?",
                 "answer": verb.passe_compose,
                 "verb_id": verb.id,
                 "type": "passe"
