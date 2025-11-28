@@ -1,3 +1,4 @@
+# app/api/auth.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app import schemas, models, auth as auth_utils, database
@@ -24,6 +25,6 @@ def signup(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
 def login(user: schemas.UserLogin, db: Session = Depends(database.get_db)):
     db_user = auth_utils.authenticate_user(db, user.username, user.password)
     if not db_user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inv·lidas")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inv√°lidas")
     access_token = auth_utils.create_access_token({"sub": str(db_user.id)})
     return {"access_token": access_token, "token_type": "bearer"}
