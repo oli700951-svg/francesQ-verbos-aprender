@@ -1,3 +1,4 @@
+# app/models.py
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -42,3 +43,4 @@ class ExamResult(Base):
     score = Column(Integer)
     total = Column(Integer)
     timestamp = Column(DateTime, default=datetime.utcnow)
+
